@@ -15,13 +15,32 @@ display.fill(white)
 cnt = 0
 for i in range(1,board_length+1):
     for j in range(1,board_length+1):
-        if cnt % 2 == 0:
-            pygame.draw.rect(display, white, [size_square*(j-1),size_square*(i-1),size_square,size_square])
-        else:
+        if cnt % 2 != 0:
             pygame.draw.rect(display, black, [size_square*(j-1),size_square*(i-1),size_square,size_square])
+        #else:
+            #pygame.draw.rect(display, black, [size_square*(j-1),size_square*(i-1),size_square,size_square])
         cnt +=1
     cnt-=1
 
+#Creating Piece
+class Piece:
+
+    def __init__(self,x,y,color):
+        self.image = pygame.draw.circle(display,color,(x,y),15)
+    
+    def move(self,x,y):
+        self.x = x
+        self.y = y
+
+
+#Putting Pieces on the Board
+for i in range(1,board_length+1):
+    for j in range(1,board_length+1):
+        if i % 2 == (j + 1) % 2:
+            if j <= 3:
+                Piece((i*50) - 25, (j*50) - 25, (100,100,100))
+            elif j >5:
+                Piece((i*50) - 25, (j*50) - 25, (0,30,255))
 #Game Loop Begins
 while True:
 
@@ -31,5 +50,10 @@ while True:
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
+        elif event.type == MOUSEBUTTONDOWN:
+            pos = pygame.mouse.get_pos()
+            print(pos)
+            print("Mecheu")
+    
 
         
