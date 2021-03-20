@@ -54,7 +54,31 @@ def clicked_piece(mouse_pos):
             return piece
     return None
 
-def validate_move(pos_piece,mouse_pos):
+"""def delete_eated_piece(pos_piece,mouse_pos,direction):
+
+    eat_left = False
+    if(mouse_pos[0] < pos_piece[0]):
+        eat_left = True
+    else:
+        eat_left = False
+
+    for piece in all_pieces:
+        if(eat_left == True):
+            if(transform_pos_row_col([piece.x,piece.y]) == [pos_piece[0] - direction,pos_piece[1] - direction]):
+                del(piece)
+        else:
+            if(transform_pos_row_col([piece.x,piece.y]) == [pos_piece[0] + direction,pos_piece[1] + direction]):
+                del(piece)"""
+
+def eat_piece_movement(pos_piece,mouse_pos,direction):
+
+    for piece in all_pieces:
+        if(transform_pos_row_col([piece.x,piece.y]) == [pos_piece[0] + direction , pos_piece[1] + direction] or transform_pos_row_col([piece.x,piece.y]) == [pos_piece[0] + direction , pos_piece[1] - direction]):
+            if(mouse_pos[1] == pos_piece[1] + 2* direction and (mouse_pos[0] == pos_piece[0] + 2*direction or mouse_pos[0] == pos_piece[0] - 2*direction)):
+                return True
+    return False
+
+def validate_move(pos_piece,mouse_pos,direction):
 
     mouse_pos = transform_pos_row_col(mouse_pos)
     piece_pos = transform_pos_row_col(pos_piece)
@@ -62,10 +86,20 @@ def validate_move(pos_piece,mouse_pos):
     print(piece_pos)
 
     for piece in all_pieces:
+        #Piece House
         if(mouse_pos == transform_pos_row_col([piece.x,piece.y])):
             return False
-        elif(mouse_pos[0] == piece_pos[0] or mouse_pos[0] < piece_pos[0] - 1 or mouse_pos[0] > piece_pos[0] + 1 or mouse_pos[1] > piece_pos[1] + 1 or mouse_pos[1] < piece_pos[1] - 1 or mouse_pos[1] == piece_pos[1]):
-            return False
+    #Eat Piece Case
+    if(eat_piece_movement(piece_pos,mouse_pos,direction) == True):
+        #delete_eated_piece(piece_pos,mouse_pos,direction)
+        return mouse_pos
+    #Diagonal movement online
+    elif(mouse_pos[0] == piece_pos[0] or mouse_pos[0] < piece_pos[0] - 1 or mouse_pos[0] > piece_pos[0] + 1 or mouse_pos[1] > piece_pos[1] + 1 or mouse_pos[1] < piece_pos[1] - 1 or mouse_pos[1] == piece_pos[1]):
+        return False
+    #Direction of each piece
+    elif((direction == up and mouse_pos[1] > piece_pos[1]) or (direction == down and mouse_pos[1] < piece_pos[1])):
+        return False
+
     return mouse_pos    
 
 
@@ -80,12 +114,28 @@ for i in range(1,board_length+1):
             elif j >5:
                 Piece((i*50) - 25, (j*50) - 25, (0,30,255),False,up)
                 all_pieces.append(Piece((i*50) - 25, (j*50) - 25, (0,30,255),False,up))
+
+def draw_board_and_pieces():
+    #board
+    display.fill(white)
+    cnt = 0
+    for i in range(1,board_length+1):
+        for j in range(1,board_length+1):
+            if cnt % 2 != 0:
+                pygame.draw.rect(display, black, [size_square*(j-1),size_square*(i-1),size_square,size_square])
+            cnt +=1
+        cnt-=1
+    #pieces
+    for piece in all_pieces:
+        pygame.draw.circle(display, piece.color, (piece.x,piece.y), 15)
             
 
 #Game Loop Begins
 move_piece = False
 while True:
 
+    display.fill(black)
+    draw_board_and_pieces()
 
     for event in pygame.event.get():
         #QUIT
@@ -104,9 +154,11 @@ while True:
         #Move Piece
         elif event.type == MOUSEBUTTONDOWN and move_piece == True:
             mouse_pos = pygame.mouse.get_pos()
-            if validate_move(piece_pos,mouse_pos) != False:
+            direction = piece.direction
+            if validate_move(piece_pos,mouse_pos,direction) != False:
                 piece.move(mouse_pos)
             move_piece = False
+    
     pygame.display.update() 
       
                 
