@@ -1,9 +1,9 @@
 --Checkers game made using pygame--
 
 INSTRUCTIONS:
-1- Click on a piece that you want to move.
-2- Click on a valide house that you want to move the piece you clicked.
-3- Have fun!!
+- Click on a piece that you want to move.
+- Click on a valide house that you want to move the piece you clicked.
+- Have fun!!
 
 NEXT STEPS TO FINISH PROJECT:
 - Implement alternate plays.
