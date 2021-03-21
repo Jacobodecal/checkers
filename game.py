@@ -54,7 +54,7 @@ def clicked_piece(mouse_pos):
             return piece
     return None
 
-"""def delete_eated_piece(pos_piece,mouse_pos,direction):
+def delete_eated_piece(pos_piece,mouse_pos,direction):
 
     eat_left = False
     if(mouse_pos[0] < pos_piece[0]):
@@ -64,11 +64,20 @@ def clicked_piece(mouse_pos):
 
     for piece in all_pieces:
         if(eat_left == True):
-            if(transform_pos_row_col([piece.x,piece.y]) == [pos_piece[0] - direction,pos_piece[1] - direction]):
-                del(piece)
+            if(piece.color == (100,100,100) and transform_pos_row_col([piece.x,piece.y]) == [pos_piece[0] + direction,pos_piece[1] + direction]):
+                delete_piece(piece)
+            elif(piece.color == (0,30,255) and transform_pos_row_col([piece.x,piece.y]) == [pos_piece[0] - direction,pos_piece[1] + direction]):
+                delete_piece(piece)
         else:
-            if(transform_pos_row_col([piece.x,piece.y]) == [pos_piece[0] + direction,pos_piece[1] + direction]):
-                del(piece)"""
+            if(piece.color == (0,30,255) and transform_pos_row_col([piece.x,piece.y]) == [pos_piece[0] + direction,pos_piece[1] + direction]):
+                delete_piece(piece)
+            elif(piece.color == (100,100,100) and transform_pos_row_col([piece.x,piece.y]) == [pos_piece[0] - direction,pos_piece[1] + direction]):
+                delete_piece(piece)
+
+def delete_piece(piece):
+    for i in range(len(all_pieces) - 1):
+        if piece == all_pieces[i]:
+            del all_pieces[i]
 
 def eat_piece_movement(pos_piece,mouse_pos,direction):
 
@@ -91,7 +100,7 @@ def validate_move(pos_piece,mouse_pos,direction):
             return False
     #Eat Piece Case
     if(eat_piece_movement(piece_pos,mouse_pos,direction) == True):
-        #delete_eated_piece(piece_pos,mouse_pos,direction)
+        delete_eated_piece(piece_pos,mouse_pos,direction)
         return mouse_pos
     #Diagonal movement online
     elif(mouse_pos[0] == piece_pos[0] or mouse_pos[0] < piece_pos[0] - 1 or mouse_pos[0] > piece_pos[0] + 1 or mouse_pos[1] > piece_pos[1] + 1 or mouse_pos[1] < piece_pos[1] - 1 or mouse_pos[1] == piece_pos[1]):
@@ -114,6 +123,7 @@ for i in range(1,board_length+1):
             elif j >5:
                 Piece((i*50) - 25, (j*50) - 25, (0,30,255),False,up)
                 all_pieces.append(Piece((i*50) - 25, (j*50) - 25, (0,30,255),False,up))
+
 
 def draw_board_and_pieces():
     #board
