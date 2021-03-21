@@ -6,10 +6,10 @@ INSTRUCTIONS:
 3- Have fun!!
 
 NEXT STEPS TO FINISH PROJECT:
-- Implement alternate plays 
-- Implement end_game function to check winner and loser
-- Implement king piece 
-- Solve bugs of the game
+- Implement alternate plays.
+- Implement end_game function to check winner and loser.
+- Implement king piece.
+- Solve bugs of the game.
 
 BUGS I SEEN YET:
 - Near the corners there are some bugs to eat pieces (check the function that validates moves).
